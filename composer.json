@@ -48,12 +48,13 @@
         "php": ">=7.1",
         "ext-json": "*",
         "omnipay/common": "^3.0",
-        "yoomoney/yookassa-sdk-php": "^2.8",
-        "symfony/http-client": "^5.4",
-        "nyholm/psr7": "^1.8"
+        "yoomoney/yookassa-sdk-php": "^2.4"
     },
     "require-dev": {
-        "omnipay/tests": "^3.0"
+        "omnipay/tests": "^3.0",
+        "hiqdev/hidev": "dev-master",
+        "hiqdev/hidev-php": "dev-master",
+        "hiqdev/hidev-hiqdev": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -66,10 +67,5 @@
             "type": "composer",
             "url": "https://asset-packagist.org"
         }
-    ],
-    "config": {
-        "allow-plugins": {
-            "php-http/discovery": true
-        }
-    }
+    ]
 }
