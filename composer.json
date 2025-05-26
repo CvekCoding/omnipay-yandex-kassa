@@ -48,7 +48,7 @@
         "php": ">=7.1",
         "ext-json": "*",
         "omnipay/common": "^3.0",
-        "yoomoney/yookassa-sdk-php": "^2.8",
+        "yoomoney/yookassa-sdk-php": "dev-main",
         "http-interop/http-factory-guzzle": "^1.2"
     },
     "require-dev": {
@@ -67,6 +67,10 @@
         {
             "type": "composer",
             "url": "https://asset-packagist.org"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/AdamSolaris/yookassa-sdk-php"
         }
     ]
 }
