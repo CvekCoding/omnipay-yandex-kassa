@@ -18,6 +18,8 @@ use Omnipay\YandexKassa\Message\DetailsRequest;
 use Omnipay\YandexKassa\Message\DetailsResponse;
 use Omnipay\YandexKassa\Message\IncomingNotificationRequest;
 use Omnipay\YandexKassa\Message\PurchaseRequest;
+use Omnipay\YandexKassa\Message\RefundRequest;
+use Omnipay\YandexKassa\Message\RefundResponse;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use YooKassa\Client;
 
@@ -110,6 +112,15 @@ class Gateway extends AbstractGateway
     public function notification(array $parameters = [])
     {
         return $this->createRequest(IncomingNotificationRequest::class, $this->injectYandexClient($parameters));
+    }
+
+    /**
+     * @param array $parameters
+     * @return RefundResponse|\Omnipay\Common\Message\AbstractRequest
+     */
+    public function refund(array $parameters = [])
+    {
+        return $this->createRequest(RefundRequest::class, $this->injectYandexClient($parameters));
     }
 
     private function injectYandexClient(array $parameters): array
