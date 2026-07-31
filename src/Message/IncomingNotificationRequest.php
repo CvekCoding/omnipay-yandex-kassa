@@ -42,7 +42,8 @@ class IncomingNotificationRequest extends AbstractRequest
         } catch (\Throwable $e) {
             throw new InvalidResponseException(
                 'Error communicating with payment gateway: ' . $e->getMessage(),
-                $e->getCode()
+                $e->getCode(),
+                $e
             );
         }
     }

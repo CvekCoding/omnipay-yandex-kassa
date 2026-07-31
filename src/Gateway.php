@@ -22,6 +22,7 @@ use Omnipay\YandexKassa\Message\RefundRequest;
 use Omnipay\YandexKassa\Message\RefundResponse;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use YooKassa\Client;
+use YooKassa\Client\CurlClient;
 
 /**
  * Class Gateway.
@@ -30,6 +31,17 @@ use YooKassa\Client;
  */
 class Gateway extends AbstractGateway
 {
+    /**
+     * Seconds to wait for the connection (TCP + TLS) to the YooKassa API.
+     *
+     * The SDK default is 30s, which is unusable for a call made while an incoming webhook is being
+     * served: one unreachable API pins the worker for half a minute before anyone can retry.
+     */
+    const DEFAULT_CONNECTION_TIMEOUT = 5;
+
+    /** Seconds to wait for the whole round trip (SDK default is 80s, see above). */
+    const DEFAULT_TIMEOUT = 15;
+
     /** @var Client|null */
     private $yandexClient;
 
@@ -43,9 +55,35 @@ class Gateway extends AbstractGateway
         if ($this->yandexClient === null) {
             $this->yandexClient = new Client();
             $this->yandexClient->setAuth($this->getShopId(), $this->getSecret());
+
+            $apiClient = $this->yandexClient->getApiClient();
+            if ($apiClient instanceof CurlClient) {
+                $apiClient->setConnectionTimeout($this->getConnectionTimeout());
+                $apiClient->setTimeout($this->getTimeout());
+            }
         }
 
         return $this->yandexClient;
+    }
+
+    public function getConnectionTimeout()
+    {
+        return $this->getParameter('connectionTimeout') ?: self::DEFAULT_CONNECTION_TIMEOUT;
+    }
+
+    public function setConnectionTimeout($value)
+    {
+        return $this->setParameter('connectionTimeout', $value);
+    }
+
+    public function getTimeout()
+    {
+        return $this->getParameter('timeout') ?: self::DEFAULT_TIMEOUT;
+    }
+
+    public function setTimeout($value)
+    {
+        return $this->setParameter('timeout', $value);
     }
 
     public function getName()

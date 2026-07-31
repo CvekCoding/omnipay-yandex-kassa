@@ -41,9 +41,14 @@ class DetailsRequest extends AbstractRequest
 
             return new DetailsResponse($this, $response);
         } catch (\Throwable $e) {
+            // Keep the original exception: a curl-level failure arrives as ApiConnectionException
+            // with code 0, which is indistinguishable from "the gateway answered, but not with what
+            // we expected" once flattened into InvalidResponseException. Callers need that difference
+            // to tell a transport hiccup (retry) from a declined payment (final).
             throw new InvalidResponseException(
                 'Error communicating with payment gateway: ' . $e->getMessage(),
-                $e->getCode()
+                $e->getCode(),
+                $e
             );
         }
     }
